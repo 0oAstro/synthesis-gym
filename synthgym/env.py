@@ -61,13 +61,12 @@ def parse_action(raw: dict, target: str, vocab: set[str], aliases: dict[str, str
             return Invalid("add needs 'precursors' as a list or a {formula: moles} dict")
         reduced = {}
         for name in names:
-            if aliases and name in aliases:
-                formula = aliases[name]
-            else:
-                try:
-                    formula = Composition(name).reduced_formula
-                except Exception:
+            try:
+                formula = Composition(name).reduced_formula
+            except Exception:
+                if not aliases or name not in aliases:
                     return Invalid(f"cannot parse formula {name!r}")
+                formula = aliases[name]
             if formula not in vocab:
                 return Invalid(f"{name} is not in the precursor vocabulary")
             reduced[formula] = name

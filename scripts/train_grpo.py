@@ -33,6 +33,8 @@ def main() -> None:
     parser.add_argument("--max-steps", type=int, default=150)
     parser.add_argument("--n-tasks", type=int, default=600)
     parser.add_argument("--use-vllm", action="store_true")
+    parser.add_argument("--batch", type=int, default=2)
+    parser.add_argument("--accum", type=int, default=8)
     args = parser.parse_args()
 
     task_ids = list_tasks("SynthGym-v0/train")
@@ -44,24 +46,25 @@ def main() -> None:
         output_dir=args.output,
         max_steps=args.max_steps,
         learning_rate=2e-5,
-        per_device_train_batch_size=8,
-        gradient_accumulation_steps=2,
+        per_device_train_batch_size=args.batch,
+        gradient_accumulation_steps=args.accum,
         num_generations=8,
-        max_completion_length=448,
+        max_completion_length=384,
         temperature=1.0,
         beta=0.0,
         fp16=True,
         bf16=False,
         gradient_checkpointing=True,
         logging_steps=1,
-        save_steps=50,
+        save_steps=20,
         report_to="none",
         use_vllm=args.use_vllm,
         vllm_mode="colocate",
         vllm_gpu_memory_utilization=0.3,
         log_completions=False,
+        model_init_kwargs={"dtype": "float16"},
     )
-    peft_config = LoraConfig(r=32, lora_alpha=64, lora_dropout=0.0, target_modules="all-linear", task_type="CAUSAL_LM")
+    peft_config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.0, target_modules="all-linear", task_type="CAUSAL_LM")
     trainer = GRPOTrainer(model=args.model, reward_funcs=[gym_reward], args=config, train_dataset=dataset, peft_config=peft_config)
     trainer.train()
     trainer.save_model(args.output + "/final")

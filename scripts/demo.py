@@ -73,6 +73,7 @@ class Screen:
         self.agent_name = agent_name
         self.reason = Text("waiting for the agent…", style="dim")
         self.action_json = "{}"
+        self.true_w: dict[int, float] = {}
         self.layout = Layout()
         self.layout.split_column(Layout(name="header", size=3), Layout(name="body", ratio=3), Layout(name="trajectory", ratio=2))
         self.layout["body"].split_row(Layout(name="agent", ratio=5), Layout(name="state", ratio=6))
@@ -119,7 +120,7 @@ class Screen:
         rows.add_column("reward", width=8, justify="right")
         for record in env.history:
             style = OP_STYLE.get(record["op"], "white")
-            w_target = record.get("w_target_true")
+            w_target = self.true_w.get(record["step"])
             rows.add_row(str(record["step"]), Text(f"[{record['op']:<7}]", style=style), describe(record),
                          Text(f"{w_target:.2f}" if w_target is not None else "", style=LIME if (w_target or 0) >= 0.9 else "white"),
                          Text(f"{record['reward']:+.3f}", style=LIME if record["reward"] > 0 else "dim"))
@@ -179,7 +180,7 @@ def main() -> None:
             live.update(screen.render(), refresh=True)
             time.sleep(args.delay * 0.6)
             observation, reward, terminated, truncated, info = env.step(action)
-            env.history[-1]["w_target_true"] = info["w_target"]
+            screen.true_w[env.steps] = info["w_target"]
             live.update(screen.render(), refresh=True)
             time.sleep(args.delay)
             if terminated or truncated:
