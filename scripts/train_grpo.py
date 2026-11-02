@@ -34,6 +34,7 @@ def main() -> None:
     parser.add_argument("--n-tasks", type=int, default=600)
     parser.add_argument("--use-vllm", action="store_true")
     parser.add_argument("--batch", type=int, default=2)
+    parser.add_argument("--lr", type=float, default=5e-6)
     parser.add_argument("--accum", type=int, default=8)
     args = parser.parse_args()
 
@@ -45,7 +46,7 @@ def main() -> None:
     config = GRPOConfig(
         output_dir=args.output,
         max_steps=args.max_steps,
-        learning_rate=2e-5,
+        learning_rate=args.lr,
         per_device_train_batch_size=args.batch,
         gradient_accumulation_steps=args.accum,
         num_generations=8,
@@ -61,7 +62,8 @@ def main() -> None:
         use_vllm=args.use_vllm,
         vllm_mode="colocate",
         vllm_gpu_memory_utilization=0.3,
-        log_completions=False,
+        log_completions=True,
+        num_completions_to_print=2,
         model_init_kwargs={"dtype": "float16"},
     )
     peft_config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.0, target_modules="all-linear", task_type="CAUSAL_LM")
