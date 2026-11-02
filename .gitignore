@@ -5,3 +5,5 @@ models/
 lab/queue/
 lab/results/
 .cache/
+cache/
+checkpoints/

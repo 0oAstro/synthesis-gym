@@ -27,6 +27,8 @@ class RealRun:
     source: str
     target: str
     precursors: tuple[str, ...]
+    amounts: tuple[float, ...]
+    precursor_set: str
     temperature_c: float
     time_h: float
     atmosphere: str
@@ -49,7 +51,11 @@ def load_arrows_runs() -> list[RealRun]:
         for precursor_key, entry in universal.items():
             if "Temperatures" not in entry:
                 continue
-            precursors = tuple(sorted(normalize_formula(name.strip()) or name.strip() for name in precursor_key.split(",")))
+            names = [normalize_formula(name.strip()) or name.strip() for name in precursor_key.split(",")]
+            stoichiometry = entry.get("Precursor stoichiometry") or [1.0] * len(names)
+            order = sorted(range(len(names)), key=lambda index: names[index])
+            precursors = tuple(names[index] for index in order)
+            amounts = tuple(float(stoichiometry[index]) for index in order)
             for temperature_text, result in entry["Temperatures"].items():
                 if not result.get("Experimentally Verified"):
                     continue
@@ -62,6 +68,8 @@ def load_arrows_runs() -> list[RealRun]:
                     source=f"arrows3-{system}",
                     target=target,
                     precursors=precursors,
+                    amounts=amounts,
+                    precursor_set=f"{system}:{precursor_key}",
                     temperature_c=float(temperature_text.split()[0]),
                     time_h=4.0,
                     atmosphere="air",
