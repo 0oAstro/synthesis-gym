@@ -75,7 +75,7 @@ def main() -> None:
         per_device_train_batch_size=args.batch,
         gradient_accumulation_steps=args.accum,
         num_generations=8,
-        max_completion_length=768,
+        max_completion_length=1536,
         max_tool_calling_iterations=10,
         temperature=1.0,
         beta=0.0,

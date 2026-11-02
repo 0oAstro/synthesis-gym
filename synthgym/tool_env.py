@@ -47,8 +47,16 @@ class SynthesisToolEnv:
             return json.dumps({"error": "episode already stopped"})
         observation, reward, terminated, truncated, info = self.env.step(action)
         self.done = terminated or truncated
-        shown = {key: observation[key] for key in ["step", "max_steps", "cost_so_far", "charged", "mass_loss", "last_xrd", "flags"]}
-        shown["last_action"] = observation["history"][-1]
+        shown = {"step": observation["step"], "cost": observation["cost_so_far"], "mass_loss": observation["mass_loss"]}
+        last = observation["history"][-1]
+        if last["op"] == "invalid":
+            shown["invalid"] = last["reason"]
+        if last["op"] == "xrd":
+            shown["xrd"] = observation["last_xrd"]
+        if last["op"] == "add":
+            shown["charged"] = observation["charged"]
+        if observation["flags"]:
+            shown["flags"] = observation["flags"]
         if self.done:
             shown["episode_over"] = True
         return json.dumps(shown)
