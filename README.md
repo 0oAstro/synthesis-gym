@@ -109,12 +109,6 @@ chemistry knowledge.
   `stop`, and see each result before the next call (`synthgym/tool_env.py`). It plugs into TRL GRPO
   through `environment_factory` and evaluates on vLLM.
 
-## What's next
-
-The gym proves the method. The data is the business. We are starting a pilot with a materials
-science professor at IIT Delhi to record every pathway a lab tries, failed ones included, and to
-put trained agents on real furnaces. Every run makes the dataset that no one else has.
-
 ## Run
 
 ```sh
