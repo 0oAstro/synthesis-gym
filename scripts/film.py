@@ -130,6 +130,36 @@ def chart(live: Live, agents: list[tuple[str, str, str]], seconds: float) -> Non
     time.sleep(seconds)
 
 
+def ablation(live: Live, seconds: float) -> None:
+    arms = [
+        ("base, no training", "qwen3-4b-tools-base", BLUE),
+        ("clean-only: fine-tuned on its successes", "qwen3-4b-tools-rft", GREY),
+        ("GRPO: learns from failures too", "qwen3-4b-tools-grpo60", f"bold {LIME}"),
+    ]
+    recipe_rows, return_rows = [], []
+    for label, name, style in arms:
+        frame = pd.read_csv(RESULTS / f"episodes_{name}.csv")
+        k, n = int(frame["recipe_match"].sum()), len(frame)
+        low, high = wilson(k, n)
+        recipe_rows.append((label, k / n, style, f"{k / n:.0%} [{low:.0%}, {high:.0%}]"))
+        mean_return = float(frame["total_reward"].mean())
+        return_rows.append((label, mean_return, style, f"{mean_return:.2f}"))
+    body = Group(
+        Text("Clean data only vs learning from failures. Qwen3-4B, same base, matched rollout budget.", style="bold white"),
+        Text(""),
+        Text("Matches the published recipe (precursors + temperature within 150 °C), 200 held-out targets", style="white"),
+        bars(recipe_rows, 0.5),
+        Text(""),
+        Text("Mean episode return (purity minus process cost)", style="white"),
+        bars(return_rows, 1.5),
+        Text(""),
+        Text("GRPO vs clean-only, paired: recipe match p = 0.005, return p = 0.046. Clean-only vs base: no change.", style=LIME),
+        Text("Simulated success differs less (76.5% vs 73.5%, p = 0.18). Recipe match is scored against literature, not the sim.", style="dim"),
+    )
+    live.update(Align.center(body, vertical="middle", height=live.console.size.height), refresh=True)
+    time.sleep(seconds)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", required=True)
@@ -168,6 +198,7 @@ def main() -> None:
             ("heuristic", "heuristic", GREY),
             ("Claude Opus 5.5", "claude", "white"),
         ], 10)
+        ablation(live, 10)
         card(live, [("Real labs generate these failures daily.", f"bold {LIME}"), ("We capture them.", f"bold {LIME}"), ("", ""),
                     ("github.com/0oAstro/synthesis-gym", "dim")], 4)
 

@@ -80,6 +80,24 @@ episode 2.64 -> 0.05); the literature precursor match, which does not read the s
 Qwen3-4B: behaviour shifts (more XRD and regrind, temperature error vs literature 301 -> 222 C), but
 outcome changes are not significant (simulated success p = 0.68).
 
+### Clean data only vs learning from failures (Qwen3-4B, same base, matched rollout budget)
+
+- **Clean-only (rejection-sampling fine-tuning):** 931 sampled base-model episodes on the training
+  split; the 641 that reached the target are kept and the 290 failures are thrown away, which is what
+  training on published (successful) recipes amounts to. LoRA SFT, 1 epoch (`scripts/train_rft.py`).
+- **GRPO:** learns from successes and failures alike; 60 steps (30 + 30 continued from the step-30
+  adapter, `--init-adapter`).
+
+| arm (n = 200 held-out) | simulated success | recipe match | mean return |
+|---|---|---|---|
+| base | 74.5% | 27.5% | 0.98 |
+| clean-only (RFT) | 73.5% | 25.0% | 0.95 |
+| GRPO, 60 steps | 76.5% | 33.0% | 1.03 |
+
+Paired tests, GRPO-60 vs clean-only: recipe match p = 0.005 (exact McNemar), return p = 0.046
+(Wilcoxon), simulated success p = 0.18. Clean-only vs base: no significant change. Several tests were
+run, so read p = 0.046 as borderline. Recipe match is scored against the literature, not the simulator.
+
 Known simulator gap found by these runs: both models choose an inert atmosphere for almost every heat,
 and the simulator does not penalise it (literature recipes reach slightly more target under inert than
 under air, while 175 of 200 published recipes use air). Oxygen-pressure effects need calibration
