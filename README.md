@@ -9,7 +9,9 @@ reacts slowly until it is reground.
 The simulator is checked against real synthesis outcomes, including failures (ARROWS3, A-Lab), and
 the backend interface is the same one a real furnace plugs into.
 
-![demo](results/video/demo.gif)
+![film](results/video/film.gif)
+
+60-second film: `results/video/film.mp4`. Earlier single-episode demo: `results/video/demo.mp4`.
 
 ## Run
 
@@ -56,6 +58,32 @@ Simulator vs real outcomes (`results/kinetics_fit.json`, held out from the fit):
 sets, AUC of predicted target fraction vs observed >= 50 wt%: 0.79 pooled (n = 72); 0.62 within the
 900 C stratum (n = 18). NTMO (never fit): 0.30. The simulator gets the temperature trend right and
 the phase-level detail mostly wrong (mean L1 1.36 of a possible 2). These are the numbers to improve.
+
+## Training open models in the gym (GRPO, closed loop)
+
+Models act through tools (`add_precursors`, `heat`, `regrind`, `xrd`, `stop`) and see each observation,
+including paid XRD, before the next call (`synthgym/tool_env.py`). Training: TRL GRPO with
+`environment_factory`, LoRA r=16, fp16 on T4 GPUs, 30 steps x 4 prompts x 8 rollouts on the training
+split (`scripts/train_grpo_tools.py`). Evaluation: greedy, closed loop, the same 200 held-out targets
+(`scripts/eval_tools.py`, vLLM). Paired tests against the same model before training.
+
+| model (closed loop, n = 200) | precursor match | recipe match | simulated w >= 0.9 | mean return |
+|---|---|---|---|---|
+| SmolLM3-3B base | 10.5% | 5.5% | 8% [5, 13] | 0.12 |
+| SmolLM3-3B + GRPO | 43.5% | 22.5% | 76% [70, 81] | 1.03 |
+| Qwen3-4B-Instruct base | 55.5% | 27.5% | 74.5% [68, 80] | 0.98 |
+| Qwen3-4B-Instruct + GRPO | 56.5% | 27% | 76% [70, 81] | 1.03 |
+
+SmolLM3: every metric improves, exact McNemar p = 3e-20 (precursor match), 2e-8 (recipe match),
+2e-41 (simulated success). Part of the gain is learning to call the tools at all (format errors per
+episode 2.64 -> 0.05); the literature precursor match, which does not read the simulator, also rises.
+Qwen3-4B: behaviour shifts (more XRD and regrind, temperature error vs literature 301 -> 222 C), but
+outcome changes are not significant (simulated success p = 0.68).
+
+Known simulator gap found by these runs: both models choose an inert atmosphere for almost every heat,
+and the simulator does not penalise it (literature recipes reach slightly more target under inert than
+under air, while 175 of 200 published recipes use air). Oxygen-pressure effects need calibration
+against real furnace runs.
 
 ## Honest limits
 

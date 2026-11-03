@@ -122,7 +122,8 @@ def chart(live: Live, agents: list[tuple[str, str, str]], seconds: float) -> Non
         Text("Furnace temperature error vs the published recipe (lower is better)", style="bold white"),
         bars(temperature_rows, 500.0),
         Text(""),
-        Text("GRPO vs base after 30 steps: success +1.5 pts (p = 0.68, not significant); temperature error 301 → 222 °C.", style=LIME),
+        Text("SmolLM3-3B after 30 GRPO steps: success 8% → 76% (paired p < 1e-40). Part of that is learning to use the tools;", style=LIME),
+        Text("its precursor choice also moved toward the literature (11% → 44% exact match). Qwen3-4B: 74% → 76%, not significant.", style=LIME),
         Text("Closed loop: agents see only paid, noisy XRD. Held-out chemical systems. Simulated outcomes.", style="dim"),
     )
     live.update(Align.center(body, vertical="middle", height=live.console.size.height), refresh=True)
@@ -135,6 +136,7 @@ def main() -> None:
     parser.add_argument("--base", default="qwen3-4b-tools-base")
     parser.add_argument("--trained", default="qwen3-4b-tools-grpo")
     parser.add_argument("--delay", type=float, default=1.3)
+    parser.add_argument("--model-label", default="SmolLM3-3B")
     args = parser.parse_args()
     base_transcript = json.loads((RESULTS / f"transcripts_{args.base}.json").read_text())[args.task]
     trained_transcript = json.loads((RESULTS / f"transcripts_{args.trained}.json").read_text())[args.task]
@@ -143,27 +145,29 @@ def main() -> None:
     with Live(Text(""), console=console, screen=True, auto_refresh=False) as live:
         card(live, [("Can a model learn synthesis", f"bold {LIME}"), ("from failed experiments?", f"bold {LIME}"), ("", ""),
                     ("SynthGym: a furnace simulator with hidden state, checked against real lab outcomes", "dim")], 4)
-        card(live, [(f"Target: {target}", "bold white"), ("", ""), ("Qwen3-4B, before any training in the gym", BLUE),
+        card(live, [(f"Target: {target}", "bold white"), ("", ""), (f"{args.model_label}, before any training in the gym", BLUE),
                     ("left: what the model thinks and does   ·   right: the true crucible (hidden) and the noisy XRD it paid for", "dim")], 3.5)
-        replay(live, args.task, base_transcript, "Qwen3-4B base", {
-            0: "BEFORE: base model, never practised. The published recipe uses about 900 °C.",
-            3: "BEFORE: XRD shows no target, so it turns the furnace up. Hotter is not better.",
-            -1: "BEFORE: 1600-1700 °C decomposes the phase. Return = purity minus furnace and XRD costs.",
+        replay(live, args.task, base_transcript, f"{args.model_label} base", {
+            0: "BEFORE: base model, never practised. The published recipe uses about 1000 °C.",
+            4: "BEFORE: its own XRD shows 87% target, yet it keeps turning the furnace up without measuring",
+            -1: "BEFORE: 1700 °C destroyed the phase. Return = purity minus furnace and XRD costs.",
         }, args.delay)
         card(live, [("Same model after GRPO in SynthGym", f"bold {LIME}"), ("", ""),
                     ("It practised on 900+ training targets and learned from every failed attempt", "white"),
                     ("(no held-out target, and no chemical system near it, was seen in training)", "dim")], 4)
-        replay(live, args.task, trained_transcript, "Qwen3-4B + GRPO", {
+        replay(live, args.task, trained_transcript, f"{args.model_label} + GRPO", {
             0: "AFTER: same model after GRPO in the gym. Same target, same tools, same noisy XRD.",
-            3: "AFTER: it reads the XRD, regrinds, and reheats gently instead of escalating",
-            -1: "AFTER: target reached near the published temperature, in simulation",
+            3: "AFTER: XRD shows the target is there, so it stops instead of escalating",
+            -1: "AFTER: pure target at the published temperature, for the cost of one heat (simulated)",
         }, args.delay)
         chart(live, [
+            ("SmolLM3-3B base", "smollm3-tools-base", BLUE),
+            ("SmolLM3-3B + GRPO", "smollm3-tools-grpo", f"bold {LIME}"),
             ("Qwen3-4B base", "qwen3-4b-tools-base", BLUE),
             ("Qwen3-4B + GRPO", "qwen3-4b-tools-grpo", f"bold {LIME}"),
             ("heuristic", "heuristic", GREY),
             ("Claude Opus 5.5", "claude", "white"),
-        ], 9)
+        ], 10)
         card(live, [("Real labs generate these failures daily.", f"bold {LIME}"), ("We capture them.", f"bold {LIME}"), ("", ""),
                     ("github.com/0oAstro/synthesis-gym", "dim")], 4)
 
