@@ -7,3 +7,6 @@ lab/results/
 .cache/
 cache/
 checkpoints/
+logs/
+!/results/
+!/results/**

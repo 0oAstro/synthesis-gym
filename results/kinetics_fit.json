@@ -1,0 +1,150 @@
+{
+  "params": [
+    4.256592501875631,
+    4.379349637404059,
+    5.621156898140917,
+    0.8597246344015024
+  ],
+  "fit_set": {
+    "n": 135,
+    "mean_l1": 1.3102119459710104,
+    "auc_target_ge_50": 0.7403636363636363,
+    "by_temperature_c": {
+      "400": {
+        "n": 15,
+        "positives": 0,
+        "mean_l1": 1.4036613576402763,
+        "auc": null,
+        "mean_pred_target": 0.4066530922782357,
+        "mean_obs_target": 0.0
+      },
+      "500": {
+        "n": 15,
+        "positives": 0,
+        "mean_l1": 1.3882794205199318,
+        "auc": null,
+        "mean_pred_target": 0.49837524811615863,
+        "mean_obs_target": 0.0
+      },
+      "600": {
+        "n": 25,
+        "positives": 0,
+        "mean_l1": 1.4264321010925753,
+        "auc": null,
+        "mean_pred_target": 0.3327779209935064,
+        "mean_obs_target": 0.0
+      },
+      "700": {
+        "n": 34,
+        "positives": 8,
+        "mean_l1": 1.2847284956041092,
+        "auc": 0.8221153846153846,
+        "mean_pred_target": 0.310073537131133,
+        "mean_obs_target": 0.21823529411764708
+      },
+      "800": {
+        "n": 20,
+        "positives": 1,
+        "mean_l1": 1.4283430656045808,
+        "auc": 0.7105263157894737,
+        "mean_pred_target": 0.38482044848485575,
+        "mean_obs_target": 0.212875
+      },
+      "900": {
+        "n": 20,
+        "positives": 15,
+        "mean_l1": 0.966668118841737,
+        "auc": 0.6733333333333333,
+        "mean_pred_target": 0.5967467614585688,
+        "mean_obs_target": 0.5908749999999999
+      },
+      "1000": {
+        "n": 6,
+        "positives": 1,
+        "mean_l1": 1.2929509944838047,
+        "auc": 0.0,
+        "mean_pred_target": 0.7438470452874354,
+        "mean_obs_target": 0.3425
+      }
+    }
+  },
+  "held_out": {
+    "arrows3-NTMO": {
+      "n": 18,
+      "mean_l1": 1.532980671960787,
+      "auc_target_ge_50": 0.3,
+      "by_temperature_c": {
+        "300": {
+          "n": 5,
+          "positives": 0,
+          "mean_l1": 1.5958674088999247,
+          "auc": null,
+          "mean_pred_target": 0.0446603585376273,
+          "mean_obs_target": 0.0
+        },
+        "400": {
+          "n": 13,
+          "positives": 5,
+          "mean_l1": 1.508793465445734,
+          "auc": 0.2,
+          "mean_pred_target": 0.11829223116094359,
+          "mean_obs_target": 0.316923076923077
+        }
+      }
+    },
+    "arrows3-YBCO": {
+      "n": 72,
+      "mean_l1": 1.3134626515866772,
+      "auc_target_ge_50": 0.7857142857142856,
+      "by_temperature_c": {
+        "600": {
+          "n": 14,
+          "positives": 0,
+          "mean_l1": 1.2450808359097947,
+          "auc": null,
+          "mean_pred_target": 0.08994093734943977,
+          "mean_obs_target": 0.0
+        },
+        "700": {
+          "n": 16,
+          "positives": 0,
+          "mean_l1": 1.6354490979388268,
+          "auc": null,
+          "mean_pred_target": 0.14002263504002221,
+          "mean_obs_target": 0.0
+        },
+        "800": {
+          "n": 19,
+          "positives": 2,
+          "mean_l1": 1.460687494925466,
+          "auc": 0.08823529411764708,
+          "mean_pred_target": 0.2956708202620863,
+          "mean_obs_target": 0.22694736842105265
+        },
+        "900": {
+          "n": 18,
+          "positives": 13,
+          "mean_l1": 0.9601455817984905,
+          "auc": 0.6153846153846153,
+          "mean_pred_target": 0.5564548800626883,
+          "mean_obs_target": 0.6561666666666667
+        },
+        "1000": {
+          "n": 5,
+          "positives": 1,
+          "mean_l1": 1.1870621537051431,
+          "auc": 1.0,
+          "mean_pred_target": 0.6108716937852415,
+          "mean_obs_target": 0.328
+        }
+      }
+    }
+  },
+  "held_out_prior_mean_l1": 1.4163612131538363,
+  "held_out_fitted_mean_l1": 1.3573662556614994,
+  "target_shift_ev_per_fu": {
+    "Na2Te3Mo3O16": 1.3793185234631633,
+    "LiTiPO5": 0.24,
+    "Ba2YCu3O7": 0.9075353168017871
+  }
+}

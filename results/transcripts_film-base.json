@@ -1,0 +1,1229 @@
+{
+ "SynthGym-v0/hard/Sr3NiIrO6": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"Sr3NiIrO6\", \"allowed_precursors_by_element\": {\"Ir\": [\"Ir\", \"IrO2\"], \"Ni\": [\"NiO\", \"Ni\", \"Ni(OH)2\", \"Ni(NO3)2\\u00b76H2O\", \"Ni(CH3COO)2\\u00b74H2O\", \"NiCO3\", \"Ni2O3\", \"Ni(CH3COO)3\\u00b74H2O\"], \"Sr\": [\"SrCO3\", \"Sr(NO3)2\", \"SrO\", \"SrO2\", \"Sr(CO3)2\", \"Sr2CO3\", \"Sr3N2\", \"Sr\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "SrCO3",
+        "NiO",
+        "IrO2"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"SrCO3\": 3.0, \"NiO\": 1.0, \"IrO2\": 1.0}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1200,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0724, \"mass_loss\": 0.2427}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.0924, \"mass_loss\": 0.2427, \"xrd\": {\"SrO\": 0.547, \"Ir\": 0.332, \"Ni\": 0.121}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.1024, \"mass_loss\": 0.2427, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1400,
+       "time_h": 48,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.1821, \"mass_loss\": 0.2427, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.2021, \"mass_loss\": 0.2427, \"xrd\": {\"SrO\": 0.523, \"Ir\": 0.354, \"Ni\": 0.123}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 7, \"cost\": 0.2121, \"mass_loss\": 0.2427, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1600,
+       "time_h": 72,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 8, \"cost\": 0.3074, \"mass_loss\": 0.2427, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 9, \"cost\": 0.3274, \"mass_loss\": 0.2427, \"xrd\": {\"SrO\": 0.546, \"Ir\": 0.342, \"Ni\": 0.112}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "stop",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "stop",
+   "content": "{\"step\": 10, \"cost\": 0.3274, \"mass_loss\": 0.2427, \"flags\": [\"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ],
+ "SynthGym-v0/hard/Eu2CuO4": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"Eu2CuO4\", \"allowed_precursors_by_element\": {\"Cu\": [\"CuO\", \"Cu\", \"Cu2O\", \"Cu(NO3)2\", \"CuCO3\", \"Cu(NO3)2\\u00b73H2O\", \"Cu(NO3)2\\u00b72.5H2O\", \"Cu(CH3COO)2\\u00b7H2O\"], \"Eu\": [\"Eu2O3\", \"Eu\", \"Eu(NO3)3\\u00b76H2O\", \"EuN\", \"EuH2\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "Eu2O3",
+        "CuO"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"Eu2O3\": 1.0, \"CuO\": 1.0}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1000,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0653, \"mass_loss\": 0.0212}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.0853, \"mass_loss\": 0.0212, \"xrd\": {\"EuCuO2\": 0.496, \"Eu2O3\": 0.464, \"Cu\": 0.04}, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.0953, \"mass_loss\": 0.0212, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1300,
+       "time_h": 48,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.1708, \"mass_loss\": 0.0212, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.1908, \"mass_loss\": 0.0212, \"xrd\": {\"EuCuO2\": 0.47, \"Eu2O3\": 0.471, \"Cu\": 0.059}, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1500,
+       "time_h": 72,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 7, \"cost\": 0.2814, \"mass_loss\": 0.0212, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 8, \"cost\": 0.3014, \"mass_loss\": 0.0212, \"xrd\": {\"EuCuO2\": 0.538, \"Eu2O3\": 0.462}, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "stop",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "stop",
+   "content": "{\"step\": 9, \"cost\": 0.3014, \"mass_loss\": 0.0212, \"flags\": [\"unreacted precursors seen by XRD: Eu2O3\", \"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ],
+ "SynthGym-v0/hard/CoTeMoO6": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"CoTeMoO6\", \"allowed_precursors_by_element\": {\"Co\": [\"Co3O4\", \"Co2O3\", \"Co(NO3)2\\u00b76H2O\", \"CoO\", \"Co\", \"Co(CH3COO)2\\u00b74H2O\", \"CoCO3\", \"Co(NO3)2\"], \"Mo\": [\"MoO3\", \"Mo\", \"(NH4)6Mo7O24\\u00b74H2O\", \"MoO2\", \"(NH4)6Mo7O24\"], \"Te\": [\"TeO2\", \"Te\", \"H6TeO6\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "Co3O4",
+        "MoO3",
+        "TeO2"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"Co3O4\": 0.333, \"MoO3\": 1.0, \"TeO2\": 1.0}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1000,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0653, \"mass_loss\": 0.0556}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.0853, \"mass_loss\": 0.0556, \"xrd\": {\"Co2Te3O8\": 0.571, \"MoO2\": 0.342, \"CoO\": 0.086}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.0953, \"mass_loss\": 0.0556, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1400,
+       "time_h": 48,
+       "atmosphere": "reducing"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.1751, \"mass_loss\": 0.264, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.1951, \"mass_loss\": 0.264, \"xrd\": {\"Te4Mo3\": 0.659, \"Co3Mo\": 0.293, \"Te2Mo\": 0.047}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 7, \"cost\": 0.2051, \"mass_loss\": 0.264, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1600,
+       "time_h": 72,
+       "atmosphere": "vacuum"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 8, \"cost\": 0.3004, \"mass_loss\": 0.264, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 9, \"cost\": 0.3204, \"mass_loss\": 0.264, \"xrd\": {\"Te4Mo3\": 0.668, \"Co3Mo\": 0.248, \"Te2Mo\": 0.051, \"Co3O4\": 0.034}, \"flags\": [\"unreacted precursors seen by XRD: Co3O4\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 10, \"cost\": 0.3304, \"mass_loss\": 0.264, \"flags\": [\"unreacted precursors seen by XRD: Co3O4\", \"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ],
+ "SynthGym-v0/medium/Sr2ErRuO6": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"Sr2ErRuO6\", \"allowed_precursors_by_element\": {\"Er\": [\"Er2O3\"], \"Ru\": [\"RuO2\", \"Ru\"], \"Sr\": [\"SrCO3\", \"Sr(NO3)2\", \"SrO\", \"SrO2\", \"Sr(CO3)2\", \"Sr2CO3\", \"Sr3N2\", \"Sr\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "SrCO3",
+        "Er2O3",
+        "RuO2"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"SrCO3\": 2.0, \"Er2O3\": 0.5, \"RuO2\": 1.0}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1600,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0865, \"mass_loss\": 0.1937}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.1065, \"mass_loss\": 0.1937, \"xrd\": {\"SrO\": 0.411, \"Er2O3\": 0.372, \"Ru\": 0.217}, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.1165, \"mass_loss\": 0.1937, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1700,
+       "time_h": 48,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.2091, \"mass_loss\": 0.1937, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.2291, \"mass_loss\": 0.1937, \"xrd\": {\"SrO\": 0.419, \"Er2O3\": 0.368, \"Ru\": 0.214}, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 7, \"cost\": 0.2391, \"mass_loss\": 0.1937, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1700,
+       "time_h": 72,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 8, \"cost\": 0.3391, \"mass_loss\": 0.1937, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 9, \"cost\": 0.3591, \"mass_loss\": 0.1937, \"xrd\": {\"SrO\": 0.434, \"Er2O3\": 0.393, \"Ru\": 0.173}, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "stop",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "stop",
+   "content": "{\"step\": 10, \"cost\": 0.3591, \"mass_loss\": 0.1937, \"flags\": [\"unreacted precursors seen by XRD: Er2O3\", \"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ],
+ "SynthGym-v0/hard/Zn(CoO2)2": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"Zn(CoO2)2\", \"allowed_precursors_by_element\": {\"Co\": [\"Co3O4\", \"Co2O3\", \"Co(NO3)2\\u00b76H2O\", \"CoO\", \"Co\", \"Co(CH3COO)2\\u00b74H2O\", \"CoCO3\", \"Co(NO3)2\"], \"Zn\": [\"ZnO\", \"Zn\", \"Zn(NO3)2\\u00b76H2O\", \"Zn(CH3COO)2\", \"ZnCO3\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "ZnO",
+        "Co3O4"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"ZnO\": 1.0, \"Co3O4\": 0.667}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1000,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0653, \"mass_loss\": 0.0}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.0853, \"mass_loss\": 0.0, \"xrd\": {\"Co3O4\": 0.667, \"ZnO\": 0.333}, \"flags\": [\"unreacted precursors seen by XRD: Co3O4, ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.0953, \"mass_loss\": 0.0, \"flags\": [\"unreacted precursors seen by XRD: Co3O4, ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1400,
+       "time_h": 48,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.1751, \"mass_loss\": 0.0441, \"flags\": [\"unreacted precursors seen by XRD: Co3O4, ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.1951, \"mass_loss\": 0.0441, \"xrd\": {\"CoO\": 0.653, \"ZnO\": 0.347}, \"flags\": [\"unreacted precursors seen by XRD: ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 7, \"cost\": 0.2051, \"mass_loss\": 0.0441, \"flags\": [\"unreacted precursors seen by XRD: ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1600,
+       "time_h": 72,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 8, \"cost\": 0.3004, \"mass_loss\": 0.1763, \"flags\": [\"unreacted precursors seen by XRD: ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 9, \"cost\": 0.3204, \"mass_loss\": 0.1763, \"xrd\": {\"Co\": 0.557, \"ZnO\": 0.406, \"CoO\": 0.038}, \"flags\": [\"unreacted precursors seen by XRD: ZnO\", \"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 10, \"cost\": 0.3304, \"mass_loss\": 0.1763, \"flags\": [\"unreacted precursors seen by XRD: ZnO\", \"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ],
+ "SynthGym-v0/medium/Ba(TeO3)2": [
+  {
+   "role": "system",
+   "content": "You run a solid-state synthesis furnace through tools. Goal: make the target phase as pure as possible, cheaply.\nThe crucible contents are hidden; you only see what you added, mass loss, and XRD results you pay for.\nTypical route: add_precursors, heat, xrd, then regrind and heat again if precursors or intermediates remain, then stop.\nScore at stop = true target weight fraction (+0.5 bonus if >= 0.9) minus costs (heat 0.02-0.10, xrd 0.02, add and regrind 0.01, invalid 0.05).\nCall exactly one tool per turn. Always finish by calling stop."
+  },
+  {
+   "role": "user",
+   "content": "{\"target\": \"Ba(TeO3)2\", \"allowed_precursors_by_element\": {\"Ba\": [\"BaCO3\", \"Ba(NO3)2\", \"BaO\", \"BaO2\", \"Ba(CH3COO)2\", \"Ba\", \"Ba(OH)2\\u00b78H2O\", \"Ba2CO3\"], \"Te\": [\"TeO2\", \"Te\", \"H6TeO6\"]}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "add_precursors",
+      "arguments": {
+       "precursors": [
+        "BaCO3",
+        "TeO2"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "add_precursors",
+   "content": "{\"step\": 1, \"cost\": 0.01, \"mass_loss\": 0.0, \"charged\": {\"BaCO3\": 1.0, \"TeO2\": 2.0}}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1200,
+       "time_h": 24,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 2, \"cost\": 0.0724, \"mass_loss\": 0.1265}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 3, \"cost\": 0.0924, \"mass_loss\": 0.1265, \"xrd\": {\"Ba3Te4O11\": 0.815, \"Te\": 0.185}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 4, \"cost\": 0.1024, \"mass_loss\": 0.1265, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1400,
+       "time_h": 48,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 5, \"cost\": 0.1821, \"mass_loss\": 0.1265, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 6, \"cost\": 0.2021, \"mass_loss\": 0.1265, \"xrd\": {\"Ba3Te4O11\": 0.813, \"Te\": 0.187}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "regrind",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "regrind",
+   "content": "{\"step\": 7, \"cost\": 0.2121, \"mass_loss\": 0.1265, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "heat",
+      "arguments": {
+       "temperature_c": 1600,
+       "time_h": 72,
+       "atmosphere": "inert"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "heat",
+   "content": "{\"step\": 8, \"cost\": 0.3074, \"mass_loss\": 0.2401, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "xrd",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "xrd",
+   "content": "{\"step\": 9, \"cost\": 0.3274, \"mass_loss\": 0.2401, \"xrd\": {\"BaTe\": 0.662, \"Te\": 0.338}, \"flags\": [\"target not detected by XRD\"]}"
+  },
+  {
+   "role": "assistant",
+   "content": "",
+   "tool_calls": [
+    {
+     "type": "function",
+     "function": {
+      "name": "stop",
+      "arguments": {}
+     }
+    }
+   ]
+  },
+  {
+   "role": "tool",
+   "name": "stop",
+   "content": "{\"step\": 10, \"cost\": 0.3274, \"mass_loss\": 0.2401, \"flags\": [\"target not detected by XRD\"], \"episode_over\": true}"
+  }
+ ]
+}

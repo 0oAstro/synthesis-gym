@@ -1,0 +1,7 @@
+agent,task_id,tier,precursor_match,recipe_match,temp_error_c,w_target,success_sim,total_reward,steps,heats,xrd,stopped_without_xrd,invalid,format_errors
+film-base,SynthGym-v0/hard/Sr3NiIrO6,hard,False,False,550.0,0.0,False,-0.32742166267126993,10,3,3,False,0,0
+film-base,SynthGym-v0/hard/Eu2CuO4,hard,True,False,400.0,0.0,False,-0.3013860495494956,9,3,3,False,0,0
+film-base,SynthGym-v0/hard/CoTeMoO6,hard,False,False,1000.15,0.0,False,-0.33036057695383836,10,3,3,False,0,0
+film-base,SynthGym-v0/medium/Sr2ErRuO6,medium,True,False,800.15,0.0,False,-0.3590556516132789,10,3,3,False,0,0
+film-base,SynthGym-v0/hard/Zn(CoO2)2,hard,True,False,400.0,0.0,False,-0.33036057695383836,10,3,3,False,0,0
+film-base,SynthGym-v0/medium/Ba(TeO3)2,medium,True,False,950.0,0.0,False,-0.32742166267126993,10,3,3,False,0,0

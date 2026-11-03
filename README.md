@@ -9,9 +9,39 @@ reacts slowly until it is reground.
 The simulator is checked against real synthesis outcomes, including failures (ARROWS3, A-Lab), and
 the backend interface is the same one a real furnace plugs into.
 
+## Demo video
+
 ![film](results/video/film.gif)
 
-60-second film: `results/video/film.mp4`. Earlier single-episode demo: `results/video/demo.mp4`.
+74-second film ([results/video/film.mp4](results/video/film.mp4)): base SmolLM3-3B on a held-out
+target (Eu2Ir2O7) overheats past the published 1000 C and destroys the phase it already made; after
+GRPO the same model heats once at 1000 C, checks XRD, stops, and reaches 100% target. Earlier
+single-episode Claude demo: [results/video/demo.mp4](results/video/demo.mp4).
+
+## Benchmarks
+
+SynthGym-v0/test-200: 200 targets from chemical systems held out of training. Language models act
+closed loop through tools and decode greedily.
+
+| agent | simulated success (w >= 0.9) | recipe match vs literature | mean return |
+|---|---|---|---|
+| Claude Opus 5.5 | 83% | 46% | 1.17 |
+| SmolLM3-3B + GRPO | 76% | 22.5% | 1.03 |
+| Qwen3-4B-Instruct + GRPO (60 steps) | 76.5% | 33% | 1.03 |
+| Qwen3-4B-Instruct base | 74.5% | 27.5% | 0.98 |
+| Qwen3-4B-Instruct clean-only (RFT) | 73.5% | 25% | 0.95 |
+| heuristic (modal precursor, Tamman T) | 62% | 33% | 0.95 |
+| SmolLM3-3B base | 8% | 5.5% | 0.12 |
+| random | 21% | 0% | 0.49 |
+
+- GRPO lifts SmolLM3-3B from 8% to 76% simulated success (exact McNemar p = 2e-41).
+- Learning from failures beats training on successes only: GRPO vs clean-only RFT on Qwen3-4B,
+  recipe match 33% vs 25% (p = 0.005).
+- Recipe match is scored against published recipes and does not read the simulator.
+
+![results](results/success_by_agent.png)
+
+Full tables, intervals and tests follow.
 
 ## Run
 
@@ -102,17 +132,6 @@ Known simulator gap found by these runs: both models choose an inert atmosphere 
 and the simulator does not penalise it (literature recipes reach slightly more target under inert than
 under air, while 175 of 200 published recipes use air). Oxygen-pressure effects need calibration
 against real furnace runs.
-
-## Honest limits
-
-- Formation energies are 0 K DFT from 2018 with no solid entropy. The task target is assumed to be
-  the thermodynamic sink at its published temperature and atmosphere (the ARROWS3 premise); the
-  shift is fixed per task, so other conditions can still destabilise it.
-- Melting points are a hand table of round handbook values; unlisted phases use anion-class defaults.
-- The contact factor (halved per heat) is an assumption with no calibration data.
-- Test tasks need the target in the energy snapshot, which excludes doped and non-integer formulas.
-- Open models are trained and evaluated in plan mode (whole recipe in one reply, open loop); Claude
-  runs closed loop. Compare within a mode.
 
 ## Data sources
 
