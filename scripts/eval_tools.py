@@ -59,6 +59,9 @@ def main() -> None:
     parser.add_argument("--chat-template-kwargs", default="")
     parser.add_argument("--suite", default="SynthGym-v0/test-200")
     parser.add_argument("--shard", default="0/1", help="k/n: evaluate every n-th task starting at k")
+    parser.add_argument("--tasks", default="", help="comma-separated task ids (overrides --suite and --shard)")
+    parser.add_argument("--samples", type=int, default=1, help="episodes per task (for collecting rollouts)")
+    parser.add_argument("--temperature", type=float, default=0.0)
     args = parser.parse_args()
     template_kwargs = {}
     for item in filter(None, args.chat_template_kwargs.split(",")):
@@ -73,11 +76,15 @@ def main() -> None:
     from vllm.lora.request import LoRARequest
     llm = LLM(model=args.model, dtype="float16", gpu_memory_utilization=0.88, max_model_len=8192,
               enable_lora=args.lora is not None, max_lora_rank=16, enable_prefix_caching=True)
-    sampling = SamplingParams(temperature=0.0, max_tokens=192)
+    sampling = SamplingParams(temperature=args.temperature, max_tokens=192)
     lora = LoRARequest("grpo", 1, args.lora) if args.lora else None
 
     shard_index, shard_count = (int(part) for part in args.shard.split("/"))
     task_ids = list_tasks(args.suite)[shard_index::shard_count]
+    if args.tasks:
+        task_ids = args.tasks.split(",")
+    if args.samples > 1:
+        task_ids = [f"{task_id}#{k}" for task_id in task_ids for k in range(args.samples)]
     suffix = "" if shard_count == 1 else f"_shard{shard_index}of{shard_count}"
     envs = {}
     messages = {}
@@ -85,9 +92,9 @@ def main() -> None:
     format_errors = {t: 0 for t in task_ids}
     for task_id in task_ids:
         env = SynthesisToolEnv()
-        env.reset(task_id=task_id)
+        env.reset(task_id=task_id.split("#")[0])
         envs[task_id] = env
-        messages[task_id] = task_prompt(task_id)
+        messages[task_id] = task_prompt(task_id.split("#")[0])
         tools[task_id] = [env.add_precursors, env.heat, env.regrind, env.xrd, env.stop]
 
     for turn in range(MAX_TURNS):
@@ -124,7 +131,7 @@ def main() -> None:
         env.get_reward()
         reward = float(env.env.total_reward)
         gym = env.env
-        task = task_spec(task_id)
+        task = task_spec(task_id.split("#")[0])
         history = gym.history
         first_add = next((tuple(sorted(r["precursors"])) for r in history if r["op"] == "add"), None)
         heats = [r["temperature_c"] for r in history if r["op"] == "heat"]
@@ -145,7 +152,7 @@ def main() -> None:
     frame = pd.DataFrame(rows)
     RESULTS.mkdir(exist_ok=True)
     frame.to_csv(RESULTS / f"episodes_{args.name}{suffix}.csv", index=False)
-    (RESULTS / f"transcripts_{args.name}{suffix}.json").write_text(json.dumps({t: messages[t] for t in task_ids[:20]}, indent=1, default=str))
+    (RESULTS / f"transcripts_{args.name}{suffix}.json").write_text(json.dumps({t: messages[t] for t in task_ids}, indent=1, default=str))
     print(frame[["precursor_match", "recipe_match", "success_sim", "w_target", "total_reward", "heats", "xrd", "format_errors"]].mean().to_string())
 
 

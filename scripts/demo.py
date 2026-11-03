@@ -74,8 +74,10 @@ class Screen:
         self.reason = Text("waiting for the agent…", style="dim")
         self.action_json = "{}"
         self.true_w: dict[int, float] = {}
+        self.caption: str = ""
+        self.title: str | None = None
         self.layout = Layout()
-        self.layout.split_column(Layout(name="header", size=3), Layout(name="body", ratio=3), Layout(name="trajectory", ratio=2))
+        self.layout.split_column(Layout(name="header", size=5), Layout(name="body", ratio=3), Layout(name="trajectory", ratio=2))
         self.layout["body"].split_row(Layout(name="agent", ratio=5), Layout(name="state", ratio=6))
         self.layout["state"].split_column(Layout(name="hidden"), Layout(name="observed"))
 
@@ -83,7 +85,7 @@ class Screen:
         env = self.env
         line = Text()
         line.append(" SYNTHESIS GYM ", style=f"bold #111111 on {LIME}")
-        line.append(f"  {env.task.task_id}", style="bold white")
+        line.append(f"  target {self.title or env.task.task_id}", style="bold white")
         line.append("  ·  ", style="dim")
         line.append(f"agent {self.agent_name}", style=BLUE)
         line.append("  ·  ", style="dim")
@@ -92,7 +94,8 @@ class Screen:
         line.append(f"cost {env.process_cost:.3f}", style=AMBER)
         line.append("  ·  ", style="dim")
         line.append(f"return {env.total_reward:+.3f}", style=LIME if env.total_reward >= 0 else RED)
-        return Group(line, Rule(style="dim"))
+        caption = Text(f" {self.caption}", style=f"bold {LIME}") if self.caption else Text("")
+        return Group(line, Rule(style="dim"), caption)
 
     def render(self) -> Layout:
         env = self.env

@@ -57,6 +57,8 @@ def main() -> None:
     parser.add_argument("--accum", type=int, default=8)
     parser.add_argument("--chat-template-kwargs", default="")
     parser.add_argument("--steps-per-generation", type=int, default=4)
+    parser.add_argument("--init-adapter", default=None, help="continue training from a saved LoRA adapter")
+    parser.add_argument("--task-offset", type=int, default=0, help="skip this many shuffled training tasks")
     parser.add_argument("--vllm-host", default=None, help="TRL vllm-serve host; generation runs there")
     parser.add_argument("--colocate", action="store_true", help="run vLLM inside the trainer process, sleeping during backward")
     parser.add_argument("--colocate-memory", type=float, default=0.45)
@@ -64,6 +66,7 @@ def main() -> None:
 
     task_ids = list_tasks("SynthGym-v0/train")
     random.Random(0).shuffle(task_ids)
+    task_ids = task_ids[args.task_offset:] + task_ids[: args.task_offset]
     dataset = Dataset.from_list([{"prompt": task_prompt(t), "task_id": t} for t in task_ids[: args.n_tasks]])
     template_kwargs = dict(item.split("=") for item in args.chat_template_kwargs.split(",") if item)
     template_kwargs = {key: value.lower() == "true" if value.lower() in ("true", "false") else value for key, value in template_kwargs.items()}
@@ -98,8 +101,16 @@ def main() -> None:
         chat_template_kwargs=template_kwargs or None,
     )
     peft_config = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.0, target_modules="all-linear", task_type="CAUSAL_LM")
+    model = args.model
+    if args.init_adapter:
+        import torch
+        from peft import PeftModel
+        from transformers import AutoModelForCausalLM
+        base = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float16, attn_implementation="sdpa")
+        model = PeftModel.from_pretrained(base, args.init_adapter, is_trainable=True)
+        peft_config = None
     trainer = GRPOTrainer(
-        model=args.model,
+        model=model,
         processing_class=load_tokenizer(args.model, args.parser_from),
         args=config,
         train_dataset=dataset,
